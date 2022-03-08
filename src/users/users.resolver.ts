@@ -6,12 +6,19 @@ import { UsersService } from './users.service';
 
 @Resolver((of) => User)
 export class UsersResolver {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService) { }
 
   @Mutation((returns) => User)
   async createUser(
-    @Args('createUserInput') createUserInput: CreateUserInput,
+    @Args('first_name') first_name: String,
+    @Args('last_name') last_name: String,
+    @Args('email') email: String
   ): Promise<User> {
+    const createUserInput = {
+      first_name,
+      last_name,
+      email
+    };
     const user = await this.userService.create(createUserInput);
     return user;
   }
@@ -22,19 +29,33 @@ export class UsersResolver {
     return users;
   }
 
+  @Query((returns) => User)
+  async user(@Args('id') id: String): Promise<User> {
+    const user = await this.userService.findOne(id);
+    return user;
+  }
+
   @Mutation((returns) => User)
   async updateUser(
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('id') id: String,
+    @Args('first_name') first_name: String,
+    @Args('last_name') last_name: String,
+    @Args('email') email: String
   ): Promise<User> {
+    const updateUserInput = {
+      first_name,
+      last_name,
+      email
+    };
     const user = await this.userService.update(
-      updateUserInput.id,
-      updateUserInput,
+      id,
+      updateUserInput
     );
     return user;
   }
 
   @Mutation((returns) => User)
-  async removeUser(@Args('id', { type: () => Int }) id: number): Promise<User> {
+  async removeUser(@Args('id') id: String): Promise<User> {
     const user = this.userService.findOne(id);
     this.userService.remove(id);
     return user;

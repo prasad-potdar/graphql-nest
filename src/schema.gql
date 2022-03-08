@@ -3,31 +3,19 @@
 # ------------------------------------------------------
 
 type User {
-  id: Int!
+  id: String!
   first_name: String!
   last_name: String!
-  age: Int
+  email: String
 }
 
 type Query {
   users: [User!]!
+  user(id: String!): User!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
-}
-
-input CreateUserInput {
-  first_name: String!
-  last_name: String!
-  age: Int
-}
-
-input UpdateUserInput {
-  id: Int!
-  first_name: String!
-  last_name: String!
-  age: Int
+  createUser(first_name: String!, last_name: String!, email: String!): User!
+  updateUser(id: String!, first_name: String!, last_name: String!, email: String!): User!
+  removeUser(id: String!): User!
 }

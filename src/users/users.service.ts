@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './entitites/user.entity';
+const { v4: uuidv4 } = require('uuid');
 
 @Injectable()
 export class UsersService {
@@ -12,10 +13,10 @@ export class UsersService {
    */
   async create(userInput): Promise<User> {
     const user = new User();
-    user.id = (this.users?.length ? this.users.length : 0) + 1;
+    user.id = uuidv4();
     user.first_name = userInput.first_name;
     user.last_name = userInput.last_name;
-    user.age = userInput.age;
+    user.email = userInput.email;
 
     this.users.push(user);
     return user;
@@ -49,7 +50,7 @@ export class UsersService {
 
     this.users[index].first_name = userInput.first_name;
     this.users[index].last_name = userInput.last_name;
-    this.users[index].age = userInput.age;
+    this.users[index].email = userInput.email;
 
     return this.users[index];
   }
@@ -59,7 +60,6 @@ export class UsersService {
    */
   async remove(id): Promise<boolean> {
     const index = this.users.findIndex((x) => x.id === id);
-    console.log(index);
     this.users.splice(index, 1);
     return true;
   }
